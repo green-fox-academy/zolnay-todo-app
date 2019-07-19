@@ -14,15 +14,14 @@ int main(int argc, char *argv[])
                      "    -a   Adds a new task\n"
                      "    -r   Removes an task\n"
                      "    -c   Completes an task" << std::endl;
-    }
-
-    if (argc == 1) {
-        std::cout << "usage information" << std::endl;
         return 0;
     }
-
-    if (argc == 2) {
+    else if (argc == 2) {
         std::string argument(argv[1]);
+        if(argument == "-a" ){
+            std::cout << "Unable to add: no task provided";
+            return 3;
+        }
         if (argument == "-l") {
             std::ifstream taskText("../task.txt");
             if (taskText.is_open()) {
@@ -36,16 +35,12 @@ int main(int argc, char *argv[])
                 }
                 if (fileIsEmpty) {
                     std::cout << "No todos for today! :)";
-
                 }
-
+            }else if(!taskText.is_open()){
+                std::cout << "Unable to open file." << std::endl;
             }
-
             return 0;
-
         }
-
-
     }else if (argc == 3) {
         std::string argument(argv[1]);
         std::string argument2(argv[2]);
@@ -53,25 +48,16 @@ int main(int argc, char *argv[])
             std::ofstream todoTask("../task.txt", std::ios::app);
             std::string askedInput;
             if (todoTask.is_open()) {
-                todoTask << std::endl;
-
+                todoTask << std::endl << argument2;
             }else{
-                todoTask << std::endl;
-                try{
-                    throw  "no task provided";
-                }
-                catch(std::string e){
-                    std::cout << "Unable to add: " << e << std::endl;
-                }
-                return 0;
+                std::cout << "Unable to open file" << std::endl;
+                return 2;
             }
-
         }
     } else {
         std::cout << "not supported argument" << std::endl;
         return 2;
     }
-
 
     return 0;
 }
